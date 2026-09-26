@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silent Couch — A New Kind of Listener</title>
+  <meta name="description"
+    content="Silent Couch is an AI companion that listens — patiently, without judgement. Private conversations, hosted in India, on Telegram.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@500;600&display=swap');
+
+    :root {
+      --bg: #0c0906;
+      --bg-2: #14100a;
+      --bg-card: #161109;
+      --gold-bright: #ecd9ae;
+      --gold-accent: #c9853f;
+      --gold-deep: #9c6a2f;
+      --gold-line: #4a381f;
+      --ink-soft: #b9ad98;
+      --ink-faint: #7d7261;
+      --female: #c98f7a;
+      --male: #7a9bc9;
+      --nb: #b79ac9;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink-soft);
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--gold-bright);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 12.5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-accent);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .italic-accent {
+      font-style: italic;
+      color: var(--gold-accent);
+      font-weight: 500;
+    }
+
+    /* subtle grain / vignette */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse 1000px 700px at 50% -5%, rgba(201, 133, 63, 0.08), transparent 60%);
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(12, 9, 6, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gold-line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--gold-accent);
+      fill: none;
+      stroke-width: 1.4;
+    }
+
+    .brand-name {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      letter-spacing: 2.5px;
+      color: var(--gold-bright);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-accent);
+    }
+
+    .btn {
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--gold-accent);
+      border: 1px solid var(--gold-accent);
+      padding: 12px 22px;
+      text-decoration: none;
+      border-radius: 2px;
+      white-space: nowrap;
+      transition: background .2s, color .2s;
+    }
+
+    .btn:hover {
+      background: transparent;
+      color: var(--gold-bright);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-accent);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold-accent);
+      color: var(--bg);
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 96px 0;
+    }
+
+    .rule {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, var(--gold-line) 15%, var(--gold-line) 85%, transparent);
+      position: relative;
+    }
+
+    .rule.diamond::after {
+      content: "◆";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8px;
+      color: var(--gold-accent);
+      background: var(--bg);
+      padding: 0 12px;
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: 100px 0 90px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 58px);
+      line-height: 1.12;
+      margin-bottom: 24px;
+      max-width: 640px;
+    }
+
+    .hero .sub {
+      font-style: italic;
+      font-size: 21px;
+      color: var(--ink-soft);
+      max-width: 520px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .keyword-line {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 2.5px;
+      color: var(--gold-deep);
+      margin-bottom: 34px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .qr-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-line);
+      border-radius: 6px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .qr-box {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 16px;
+      border: 1.5px dashed var(--gold-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background:
+        repeating-linear-gradient(45deg, rgba(201, 133, 63, 0.05) 0 10px, transparent 10px 20px);
+      position: relative;
+    }
+
+    .qr-box svg {
+      width: 96px;
+      height: 96px;
+      stroke: var(--gold-accent);
+      fill: none;
+      stroke-width: 1;
+    }
+
+    .qr-note {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--ink-faint);
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    .qr-card .handle {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      color: var(--gold-bright);
+      margin-top: 4px;
+    }
+
+    .qr-card .status {
+      font-size: 14px;
+      color: var(--ink-faint);
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    /* ---------- FEELS LIKE ---------- */
+    .feels {
+      text-align: center;
+    }
+
+    .feels .lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(24px, 3vw, 32px);
+      line-height: 1.5;
+      color: var(--gold-bright);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* ---------- COMPANIONS ---------- */
+    .comp-intro {
+      max-width: 640px;
+      margin-bottom: 56px;
+    }
+
+    .comp-intro .sub {
+      font-style: italic;
+      font-size: 19px;
+      margin-top: 12px;
+    }
+
+    .comp-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .comp-group-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .comp-group-label .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .comp-group-label span {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .comp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-line);
+      border-radius: 6px;
+      padding: 24px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .comp-card:hover {
+      border-color: var(--gold-accent);
+      transform: translateY(-3px);
+    }
+
+    .comp-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--bg);
+      font-weight: 600;
+      border: 1px solid var(--gold-line);
+    }
+
+    .comp-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--gold-bright);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .comp-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .comp-trait {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .comp-note {
+      margin-top: 40px;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-faint);
+      text-align: center;
+    }
+
+    /* ---------- MOMENTS ---------- */
+    .moments {}
+
+    .moments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .moments h2 {
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .moments p.body {
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .moment-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .moment-tags span {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      border: 1px solid var(--gold-line);
+      padding: 8px 14px;
+      border-radius: 20px;
+    }
+
+    .moments-visual {
+      aspect-ratio: 1/1;
+      border: 1px solid var(--gold-line);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+    }
+
+    .moments-visual svg {
+      width: 38%;
+      stroke: var(--gold-accent);
+      fill: none;
+      stroke-width: 1;
+    }
+
+    /* ---------- PRIVACY ---------- */
+    .privacy {}
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.4fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .privacy-badge {
+      border: 1px solid var(--gold-line);
+      border-radius: 6px;
+      padding: 36px;
+      background: var(--bg-card);
+      text-align: center;
+    }
+
+    .privacy-badge svg {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 16px;
+      stroke: var(--gold-accent);
+      fill: none;
+      stroke-width: 1.2;
+    }
+
+    .privacy-badge .badge-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+    }
+
+    .privacy-badge .badge-sub {
+      font-size: 14px;
+      color: var(--ink-faint);
+      margin-top: 8px;
+    }
+
+    .privacy h2 {
+      font-size: clamp(28px, 4vw, 38px);
+      margin-bottom: 18px;
+    }
+
+    .privacy p.body {
+      font-size: 19px;
+      margin-bottom: 24px;
+    }
+
+    .privacy-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    .privacy-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-deep);
+      padding-bottom: 3px;
+    }
+
+    .privacy-links a:hover {
+      color: var(--gold-bright);
+    }
+
+    /* ---------- HOW TO JOIN ---------- */
+    .join {
+      text-align: center;
+    }
+
+    .join .eyebrow {
+      text-align: center;
+    }
+
+    .join h2 {
+      font-size: clamp(28px, 4vw, 38px);
+      max-width: 600px;
+      margin: 0 auto 50px;
+      line-height: 1.3;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .step .num {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--gold-accent);
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .step h3 {
+      font-family: 'EB Garamond', serif;
+      font-size: 19px;
+      color: var(--gold-bright);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 16px;
+      color: var(--ink-soft);
+    }
+
+    .final-cta {
+      margin-top: 64px;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      border-top: 1px solid var(--gold-line);
+      padding: 56px 0 36px;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand .brand-name {
+      font-size: 15px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--ink-faint);
+      margin-top: 10px;
+      max-width: 280px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-col h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      margin-bottom: 14px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 14.5px;
+      color: var(--ink-soft);
+      text-decoration: none;
+      margin-bottom: 9px;
+    }
+
+    .footer-col a:hover {
+      color: var(--gold-accent);
+    }
+
+    .footer-bottom {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--gold-line);
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--ink-faint);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    :focus-visible {
+      outline: 1.5px solid var(--gold-accent);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .comp-card {
+        transition: none;
+      }
+    }
+
+    /* ---------- MOBILE ---------- */
+    @media (max-width: 860px) {
+      .wrap {
+        padding: 0 22px;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      .nav {
+        padding: 16px 22px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 56px 0 60px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero .sub {
+        max-width: 100%;
+      }
+
+      .qr-card {
+        max-width: 280px;
+      }
+
+      .comp-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .moments-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .moments-visual {
+        order: -1;
+        max-width: 220px;
+        margin: 0 auto;
+      }
+
+      .privacy-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: left;
+      }
+
+      .footer-grid {
+        flex-direction: column;
+      }
+
+      .footer-links {
+        gap: 36px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        font-size: 16.5px;
+      }
+
+      .comp-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .comp-card {
+        padding: 16px;
+      }
+
+      .comp-avatar {
+        width: 52px;
+        height: 52px;
+        font-size: 19px;
+      }
+
+      .comp-name {
+        font-size: 20px;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-ctas .btn {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav">
+      <a class="brand" href="#top">
+        <img src="logo_14_09.png" alt="Silent Couch logo" style="height:44px;width:auto;object-fit:contain;">
+      </a>
+      <nav class="nav-links">
+        <a href="#companions">Companions</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#join">Get Access</a>
+      </nav>
+      <a class="btn" href="#join">Request Access</a>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">A New Kind of Listener</span>
+          <h1>No judgement.<br>Just someone who listens —<br><span class="italic-accent">patiently, every time.</span>
+          </h1>
+          <p class="sub">Silent Couch is an AI companion that remembers you, checks in on you, and never rushes you to
+            finish talking.</p>
+          <div class="keyword-line">“NO JUDGEMENT. &nbsp; LISTENS PATIENTLY.”</div>
+          <div class="hero-ctas">
+            <a class="btn" href="#join">Request Access</a>
+            <a class="btn btn-outline" href="#companions">Meet the Companions</a>
+          </div>
+        </div>
+        <div class="qr-card">
+          <div class="qr-box">
+            <!-- REPLACE: swap this SVG placeholder for your real Telegram QR image -->
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01" />
+            </svg>
+          </div>
+          <div class="handle">@SILENTCOUCH_BOT</div>
+          <div class="qr-note">Scan on Telegram</div>
+          <div class="status">Currently onboarding by request</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="rule diamond"></div>
+    </div>
+
+    <!-- FEELS LIKE -->
+    <section class="feels">
+      <div class="wrap">
+        <p class="lead">It doesn't wait for the right words. It doesn't need the full story before it starts caring. You
+          talk, it listens — and next time, it remembers, so you never have to start from zero.</p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="rule"></div>
+    </div>
+
+    <!-- COMPANIONS -->
+    <section id="companions">
+      <div class="wrap">
+        <div class="comp-intro">
+          <span class="eyebrow">Meet Your Companions</span>
+          <h2>Choose who you talk to.</h2>
+          <p class="sub">Nine companions, each with their own disposition — pick the voice that feels like yours.</p>
+        </div>
+
+        <!-- REPLACE: swap names, photos (use .comp-avatar as an <img> instead of initials), and trait copy (2-3 lines each) for your real personas -->
+        <div class="comp-groups">
+
+          <div>
+            <div class="comp-group-label"><span class="dot" style="background:var(--female)"></span><span>Female</span>
+            </div>
+            <div class="comp-grid">
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--female)">M</div>
+                <div class="comp-name">Meera</div>
+                <span class="comp-tag">She / Her</span>
+                <p class="comp-trait">Steady and warm. Meera listens first and speaks slowly — the kind of presence that
+                  makes hard days feel a little lighter.</p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--female)">A</div>
+                <div class="comp-name">Aanya</div>
+                <span class="comp-tag">She / Her</span>
+                <p class="comp-trait">Gentle and curious. Aanya asks the questions that help you notice what you already
+                  know.</p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--female)">I</div>
+                <div class="comp-name">Ishita</div>
+                <span class="comp-tag">She / Her</span>
+                <p class="comp-trait">Bright and encouraging. Ishita is the voice that shows up on your good days and
+                  your hard ones alike.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="comp-group-label"><span class="dot" style="background:var(--male)"></span><span>Male</span>
+            </div>
+            <div class="comp-grid">
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--male)">A</div>
+                <div class="comp-name">Arjun</div>
+                <span class="comp-tag">He / Him</span>
+                <p class="comp-trait">Calm and grounded. Arjun doesn't rush to fix things — he sits with you until
+                  things make sense.</p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--male)">K</div>
+                <div class="comp-name">Kabir</div>
+                <span class="comp-tag">He / Him</span>
+                <p class="comp-trait">Quiet strength. Kabir listens more than he speaks, and means it when he does.</p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--male)">D</div>
+                <div class="comp-name">Dev</div>
+                <span class="comp-tag">He / Him</span>
+                <p class="comp-trait">Patient and low-key. Dev is easy to talk to about the things you haven't said out
+                  loud yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="comp-group-label"><span class="dot" style="background:var(--nb)"></span><span>Non-binary</span>
+            </div>
+            <div class="comp-grid">
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--nb)">R</div>
+                <div class="comp-name">Ray</div>
+                <span class="comp-tag">They / Them</span>
+                <p class="comp-trait">Thoughtful and direct. Ray tells you the truth gently, and never talks around what
+                  matters.</p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--nb)">N</div>
+                <div class="comp-name">Noor</div>
+                <span class="comp-tag">They / Them</span>
+                <p class="comp-trait">Soft-spoken and sharp-eyed. Noor notices the details you'd otherwise talk past.
+                </p>
+              </div>
+              <div class="comp-card">
+                <div class="comp-avatar" style="background:var(--nb)">A</div>
+                <div class="comp-name">Alex</div>
+                <span class="comp-tag">They / Them</span>
+                <p class="comp-trait">Easygoing and honest. Alex feels like the friend who's always got time for you.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <p class="comp-note">Every companion remembers your conversations — the difference is in how they listen.</p>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="rule diamond"></div>
+    </div>
+
+    <!-- MOMENTS -->
+    <section class="moments">
+      <div class="wrap moments-grid">
+        <div>
+          <span class="eyebrow">One Companion, Many Moments</span>
+          <h2>Shaped to <span class="italic-accent">the moment</span> you're in.</h2>
+          <p class="body">Some days you need a steady ear. Some days, a voice that understands the pressure before a
+            match. Some days, help finding the words for a hard parenting moment. Silent Couch meets you where you are.
+          </p>
+          <div class="moment-tags">
+            <span>Everyday wellness</span>
+            <span>Tough days</span>
+            <span>Sport & performance</span>
+            <span>Parenting moments</span>
+          </div>
+        </div>
+        <div class="moments-visual">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 5h16v11H9l-4 4V16H4z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="rule"></div>
+    </div>
+
+    <!-- PRIVACY -->
+    <section id="privacy" class="privacy">
+      <div class="wrap privacy-grid">
+        <div class="privacy-badge">
+          <svg viewBox="0 0 24 24">
+            <rect x="6" y="11" width="12" height="9" rx="1" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+          <div class="badge-title">Hosted in India</div>
+          <div class="badge-sub">DPDP Act compliant</div>
+        </div>
+        <div>
+          <span class="eyebrow">Private by Design</span>
+          <h2>Your data stays home.</h2>
+          <p class="body">Every conversation is hosted on servers in India, in line with the Digital Personal Data
+            Protection (DPDP) Act. Your words don't leave the country — and they don't leave without your say.</p>
+          <div class="privacy-links">
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-of-use.html">Terms of Use</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="rule diamond"></div>
+    </div>
+
+    <!-- HOW TO JOIN -->
+    <section id="join" class="join">
+      <div class="wrap">
+        <span class="eyebrow">How to Get In</span>
+        <h2>Silent Couch is currently by invitation — we're onboarding slowly, on purpose.</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="num">I.</div>
+            <h3>Scan or open Telegram</h3>
+            <p>Scan the QR code above or open @silentcouch_bot directly on Telegram.</p>
+          </div>
+          <div class="step">
+            <div class="num">II.</div>
+            <h3>Send a request</h3>
+            <p>Tell the bot you'd like to join — it takes a minute.</p>
+          </div>
+          <div class="step">
+            <div class="num">III.</div>
+            <h3>We'll reach out</h3>
+            <p>We'll message you on Telegram when your spot opens.</p>
+          </div>
+        </div>
+        <div class="final-cta">
+          <a class="btn" href="#top">Request Access on Telegram</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top">
+            <img src="logo_silent_couch.png" alt="Silent Couch logo" style="height:40px;width:auto;object-fit:contain;">
+          </a>
+          <p>An AI companion that listens — patiently, without judgement.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <a href="#companions">Companions</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#join">Get Access</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-of-use.html">Terms of Use</a>
+          </div>
+          <div class="footer-col">
+            <h4>Talk to Us</h4>
+            <a href="https://t.me/silentcouch_bot" target="_blank" rel="noopener">@silentcouch_bot</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Silent Couch. All rights reserved.</span>
+        <span>Hosted in India · DPDP Compliant</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
